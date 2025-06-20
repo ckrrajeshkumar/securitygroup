@@ -1,0 +1,7 @@
+vpccidr ="10.0.0.0/20"
+vpcname ="babaji-vpc"
+sgname ="babaji-sg"
+inboundcidr ="0.0.0.0/0"
+inboundcidr1="0.0.0.0/0"
+inboundcidr2="0.0.0.0/0"
+outboundcidr="0.0.0.0/0"
