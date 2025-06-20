@@ -4,6 +4,43 @@ resource "aws_vpc" "babaji-vpc"{
     Name = var.vpcname
   }
 }
+resource "aws_subnet" "babaji-pub"{
+  vpc_id = aws_vpc.babaji-vpc.id
+  cidr_block = var.pubsubcidr
+  availability_zone = var.pubaz
+  map_public_ip_on_launch = true
+  tags={
+    Name = var.pubsubname
+  }
+}
+resource "aws_vpc" "babaji-pri"{
+  vpc_id = aws_vpc.babaji-vpc.id
+  cidr_block = var.prisubcidr
+  availability_zone = var.priaz
+  tags= {
+    Name = var.prisubname
+  }
+}
+resource "aws_internet_gateway" "babaji-igw"{
+  vpc_id =aws_vpc.babaji-vpc.id
+  tags={
+    Name = var.babajiigw
+  }
+}
+resource "aws_route_table" "babaji-rt"{
+  vpc_id = aws_vpc.babaji-vpc.id
+  route{
+    cidr_block = var.rtcidr
+    gateway_id = aws_internet_gateway.babaji-igw.id
+  }
+  tags={
+    Name = var.rtname
+  }
+}
+resource "aws_route_table_association" "pubrt"{
+  route_table_id = aws_route_table.babaji-rt.id
+  subnet_id = aws_subnet.babaji-pub.id
+}
 resource "aws_security_group" "babajiSG"{
   description = "Allow SSH, HTTP and HTTPs"
   vpc_id = aws_vpc.babaji-vpc.id
